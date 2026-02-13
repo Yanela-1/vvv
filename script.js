@@ -2,16 +2,19 @@ let noClickCount = 0;
 let yesScale = 1;
 
 // Track how many times "No" has been clicked
-const maxNoAttempts = 5; // After 5 clicks, No button disappears
+const maxNoAttempts = 9; // After 5 clicks, No button disappears
 
 // Phrases that change as they keep clicking No
 const noPhrases = [
     "No",
     "Are you sure? 🥺",
     "Really though? 💔",
-    "Think again! 💭",
-    "Pretty please? 🙏",
-    "One more chance? ✨"
+    "Think again!",
+    "Pretty please?",
+    "One more chance?",
+    "DALI NAAA",
+    "ANDAMOT!",
+    "ih ayoko nga"
 ];
 
 function handleNo() {
