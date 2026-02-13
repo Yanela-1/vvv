@@ -22,14 +22,9 @@ function handleNo() {
     
     // Increase Yes button size progressively (increased from 0.3 to 0.5)
     yesScale += 0.5;
-    yesBtn.style.transform = `scale(${yesScale})`;
-    yesBtn.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
     
-    // Add a bounce animation to the Yes button
-    yesBtn.style.animation = 'none';
-    setTimeout(() => {
-        yesBtn.style.animation = 'gentlePulse 3s ease-in-out infinite';
-    }, 10);
+    // Apply transform with !important to override any CSS animations
+    yesBtn.style.setProperty('transform', `scale(${yesScale})`, 'important');
     
     // Change the No button text
     if (noClickCount < noPhrases.length) {
@@ -56,23 +51,36 @@ function handleNo() {
         return;
     }
     
-    // Move the No button on mobile too (was previously disabled)
+    // Move the No button to random position
     moveButtonRandomly(noBtn);
 }
 
 function moveButtonRandomly(button) {
-    // Get random position within viewport with safer margins
-    const margin = 60; // Increased margin to keep button visible
-    const maxX = window.innerWidth - button.offsetWidth - margin;
-    const maxY = window.innerHeight - button.offsetHeight - margin;
-    
-    const randomX = Math.max(margin, Math.random() * maxX);
-    const randomY = Math.max(margin, Math.random() * maxY);
-    
+    // Force position to fixed
     button.style.position = 'fixed';
-    button.style.left = `${randomX}px`;
-    button.style.top = `${randomY}px`;
-    button.style.transition = 'all 0.3s ease';
+    button.style.zIndex = '100';
+    
+    // Calculate safe boundaries
+    const buttonWidth = button.offsetWidth;
+    const buttonHeight = button.offsetHeight;
+    const margin = 20;
+    
+    // Get viewport dimensions
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Calculate random position within safe boundaries
+    const maxX = viewportWidth - buttonWidth - margin;
+    const maxY = viewportHeight - buttonHeight - margin;
+    
+    const randomX = Math.floor(Math.random() * (maxX - margin)) + margin;
+    const randomY = Math.floor(Math.random() * (maxY - margin)) + margin;
+    
+    // Apply the new position
+    button.style.left = randomX + 'px';
+    button.style.top = randomY + 'px';
+    
+    console.log(`Moving button to: ${randomX}px, ${randomY}px`); // Debug log
 }
 
 function celebrate() {
