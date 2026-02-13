@@ -1,17 +1,17 @@
 let noClickCount = 0;
 let yesScale = 1;
 
-// Track how many times "No" has been attempted
-const maxNoAttempts = 5; // After 5 attempts, No button disappears
+// Track how many times "No" has been clicked
+const maxNoAttempts = 5; // After 5 clicks, No button disappears
 
 // Phrases that change as they keep clicking No
 const noPhrases = [
     "No",
-    "Are you sure?",
-    "Really?",
-    "Think again!",
-    "Last chance!",
-    "Please? 🥺"
+    "Are you sure? 🥺",
+    "Really though? 💔",
+    "Think again! 💭",
+    "Pretty please? 🙏",
+    "One more chance? ✨"
 ];
 
 function handleNo() {
@@ -24,44 +24,36 @@ function handleNo() {
     yesScale += 0.3;
     yesBtn.style.transform = `scale(${yesScale})`;
     
+    // Add a bounce animation to the Yes button
+    yesBtn.style.animation = 'none';
+    setTimeout(() => {
+        yesBtn.style.animation = 'gentlePulse 3s ease-in-out infinite';
+    }, 10);
+    
     // Change the No button text
     if (noClickCount < noPhrases.length) {
-        noBtn.textContent = noPhrases[noClickCount];
+        noBtn.querySelector('.button-text').textContent = noPhrases[noClickCount];
     }
+    
+    // Make the No button shake
+    noBtn.classList.add('shake-animation');
+    setTimeout(() => {
+        noBtn.classList.remove('shake-animation');
+    }, 500);
     
     // Make the No button disappear after max attempts
     if (noClickCount >= maxNoAttempts) {
         noBtn.classList.add('hidden');
-        // Add a little message
+        
+        // Update the question text
         const question = document.getElementById('question');
-        question.textContent = "I knew you'd say yes! ❤️";
-        question.style.animation = 'pulse 0.5s ease';
+        question.textContent = "I knew you'd say yes! 💕";
+        question.style.animation = 'successPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        
+        // Make the Yes button even more prominent
+        yesBtn.style.animation = 'heartBeat 1s ease-in-out infinite';
         return;
     }
-    
-    // Move the No button to a random position (only on desktop)
-    if (window.innerWidth > 768) {
-        moveButtonRandomly(noBtn);
-    } else {
-        // On mobile, just make it shake instead of moving
-        noBtn.style.animation = 'shake 0.5s ease';
-        setTimeout(() => {
-            noBtn.style.animation = '';
-        }, 500);
-    }
-}
-
-function moveButtonRandomly(button) {
-    // Get random position within viewport
-    const maxX = window.innerWidth - button.offsetWidth - 40;
-    const maxY = window.innerHeight - button.offsetHeight - 40;
-    
-    const randomX = Math.max(20, Math.random() * maxX);
-    const randomY = Math.max(20, Math.random() * maxY);
-    
-    button.style.position = 'fixed';
-    button.style.left = `${randomX}px`;
-    button.style.top = `${randomY}px`;
 }
 
 function celebrate() {
@@ -69,20 +61,18 @@ function celebrate() {
     card.classList.add('success-state');
     
     card.innerHTML = `
-        <img src="./celebration-cat.gif" alt="Celebration">
-        <h1>Yay! I knew you'd say yes! ❤️</h1>
-        <p style="color: #d63384; font-size: 1.2rem; margin-top: 20px;">
-            Can't wait to see you on the 14th! 💕
+        <div class="gif-container">
+            <img src="./celebration-cat.gif" alt="Celebration" id="status-gif">
+        </div>
+        <h1>Yay! I knew you'd say yes! 💕</h1>
+        <div class="heart-divider">❤️ 💖 ❤️</div>
+        <p class="celebration-message">
+            Can't wait to see you on the 14th! 🎉
         </p>
     `;
     
     // Trigger confetti
     launchConfetti();
-    
-    // Play celebratory animation
-    setTimeout(() => {
-        card.style.animation = 'celebration 0.5s ease';
-    }, 100);
 }
 
 // Confetti animation
@@ -93,8 +83,11 @@ function launchConfetti() {
     canvas.height = window.innerHeight;
     
     const confetti = [];
-    const confettiCount = 150;
-    const colors = ['#ff4d6d', '#ff758f', '#ffc2d1', '#ff9eb6', '#ffb3c6', '#d63384'];
+    const confettiCount = 200;
+    const colors = ['#ff6b9d', '#ffa5c4', '#ffc4e0', '#ff8fb3', '#ffb3d9', '#ff4d6d'];
+    const gravity = 0.5;
+    const terminalVelocity = 5;
+    const drag = 0.075;
     
     // Create confetti pieces
     for (let i = 0; i < confettiCount; i++) {
@@ -106,7 +99,9 @@ function launchConfetti() {
             color: colors[Math.floor(Math.random() * colors.length)],
             tilt: Math.random() * 10 - 10,
             tiltAngleIncremental: Math.random() * 0.07 + 0.05,
-            tiltAngle: 0
+            tiltAngle: 0,
+            velocityY: Math.random() * 3 + 2,
+            velocityX: Math.random() * 4 - 2
         });
     }
     
@@ -116,6 +111,7 @@ function launchConfetti() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         confetti.forEach((piece, index) => {
+            // Draw confetti piece
             ctx.beginPath();
             ctx.lineWidth = piece.r / 2;
             ctx.strokeStyle = piece.color;
@@ -123,10 +119,14 @@ function launchConfetti() {
             ctx.lineTo(piece.x + piece.tilt, piece.y + piece.tilt + piece.r / 4);
             ctx.stroke();
             
-            // Update position
+            // Update position with physics
             piece.tiltAngle += piece.tiltAngleIncremental;
-            piece.y += (Math.cos(piece.d) + 3 + piece.r / 2) / 2;
-            piece.x += Math.sin(piece.d);
+            piece.velocityY += gravity;
+            piece.velocityY = Math.min(piece.velocityY, terminalVelocity);
+            piece.velocityX -= piece.velocityX * drag;
+            
+            piece.y += piece.velocityY;
+            piece.x += piece.velocityX;
             piece.tilt = Math.sin(piece.tiltAngle - index / 3) * 15;
             
             // Reset if off screen
@@ -139,7 +139,9 @@ function launchConfetti() {
                     color: piece.color,
                     tilt: piece.tilt,
                     tiltAngleIncremental: piece.tiltAngleIncremental,
-                    tiltAngle: piece.tiltAngle
+                    tiltAngle: piece.tiltAngle,
+                    velocityY: Math.random() * 3 + 2,
+                    velocityX: Math.random() * 4 - 2
                 };
             }
         });
@@ -149,30 +151,39 @@ function launchConfetti() {
     
     drawConfetti();
     
-    // Stop confetti after 10 seconds
+    // Stop confetti after 12 seconds
     setTimeout(() => {
         cancelAnimationFrame(animationFrame);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }, 10000);
+        // Fade out
+        let opacity = 1;
+        const fadeOut = setInterval(() => {
+            opacity -= 0.05;
+            canvas.style.opacity = opacity;
+            if (opacity <= 0) {
+                clearInterval(fadeOut);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.style.opacity = 1;
+            }
+        }, 50);
+    }, 12000);
 }
 
-// Add shake animation to CSS dynamically
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-        20%, 40%, 60%, 80% { transform: translateX(10px); }
-    }
-`;
-document.head.appendChild(style);
-
-// Handle window resize to reset button positions if needed
+// Handle window resize
 window.addEventListener('resize', () => {
-    const noBtn = document.getElementById('noButton');
-    if (noBtn && window.innerWidth <= 768) {
-        noBtn.style.position = 'relative';
-        noBtn.style.left = '';
-        noBtn.style.top = '';
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     }
+});
+
+// Prevent double-tap zoom on buttons for iOS
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            button.click();
+        }, { passive: false });
+    });
 });
