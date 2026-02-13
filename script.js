@@ -2,19 +2,16 @@ let noClickCount = 0;
 let yesScale = 1;
 
 // Track how many times "No" has been clicked
-const maxNoAttempts = 9; // After 5 clicks, No button disappears
+const maxNoAttempts = 5; // After 5 clicks, No button disappears
 
 // Phrases that change as they keep clicking No
 const noPhrases = [
     "No",
     "Are you sure? 🥺",
     "Really though? 💔",
-    "Think again!",
-    "Pretty please?",
-    "One more chance?",
-    "DALI NAAA",
-    "ANDAMOT!",
-    "ih ayoko nga"
+    "Think again! 💭",
+    "Pretty please? 🙏",
+    "One more chance? ✨"
 ];
 
 function handleNo() {
@@ -23,9 +20,10 @@ function handleNo() {
     
     noClickCount++;
     
-    // Increase Yes button size progressively
-    yesScale += 0.3;
+    // Increase Yes button size progressively (increased from 0.3 to 0.5)
+    yesScale += 0.5;
     yesBtn.style.transform = `scale(${yesScale})`;
+    yesBtn.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
     
     // Add a bounce animation to the Yes button
     yesBtn.style.animation = 'none';
@@ -57,6 +55,24 @@ function handleNo() {
         yesBtn.style.animation = 'heartBeat 1s ease-in-out infinite';
         return;
     }
+    
+    // Move the No button on mobile too (was previously disabled)
+    moveButtonRandomly(noBtn);
+}
+
+function moveButtonRandomly(button) {
+    // Get random position within viewport with safer margins
+    const margin = 60; // Increased margin to keep button visible
+    const maxX = window.innerWidth - button.offsetWidth - margin;
+    const maxY = window.innerHeight - button.offsetHeight - margin;
+    
+    const randomX = Math.max(margin, Math.random() * maxX);
+    const randomY = Math.max(margin, Math.random() * maxY);
+    
+    button.style.position = 'fixed';
+    button.style.left = `${randomX}px`;
+    button.style.top = `${randomY}px`;
+    button.style.transition = 'all 0.3s ease';
 }
 
 function celebrate() {
@@ -178,15 +194,4 @@ window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
-});
-
-// Prevent double-tap zoom on buttons for iOS
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            button.click();
-        }, { passive: false });
-    });
 });
