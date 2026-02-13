@@ -4,159 +4,308 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary-pink: #ff6b9d;
+    --secondary-pink: #ffa5c4;
+    --light-pink: #ffd6e8;
+    --extra-light-pink: #fff0f6;
+    --text-dark: #4a4a4a;
+    --shadow-pink: rgba(255, 107, 157, 0.3);
+}
+
 body {
-    background: linear-gradient(135deg, #ffeef2 0%, #ffe0e9 50%, #ffd1dc 100%);
+    background: linear-gradient(135deg, #fff0f6 0%, #ffe4f1 25%, #ffd6e8 50%, #ffc4e0 75%, #ffb3d9 100%);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+    overflow-x: hidden;
     position: relative;
+    padding: 20px;
 }
 
-/* Floating hearts background animation */
-body::before {
-    content: "💕 💖 💗 💓 💝 ❤️ 💕 💖 💗 💓";
-    position: absolute;
-    top: -50px;
+/* Animated floating hearts background */
+.hearts-background {
+    position: fixed;
+    top: 0;
     left: 0;
-    right: 0;
-    font-size: 2rem;
-    opacity: 0.1;
-    animation: floatHearts 20s linear infinite;
-    white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
 }
 
-@keyframes floatHearts {
-    from {
-        transform: translateY(0);
+.hearts-background::before,
+.hearts-background::after {
+    content: '💕';
+    position: absolute;
+    font-size: 30px;
+    opacity: 0.15;
+    animation: floatUp 15s infinite ease-in-out;
+}
+
+.hearts-background::before {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.hearts-background::after {
+    content: '💖';
+    left: 80%;
+    animation-delay: 7s;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
     }
-    to {
-        transform: translateY(100vh);
+    10% {
+        opacity: 0.15;
+    }
+    90% {
+        opacity: 0.15;
+    }
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
     }
 }
 
 .container {
     text-align: center;
-    padding: 20px;
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #main-card {
     background: white;
-    padding: 40px 30px;
-    border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(214, 51, 132, 0.2);
+    padding: 50px 40px;
+    border-radius: 40px;
+    box-shadow: 
+        0 20px 60px rgba(255, 107, 157, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.8) inset;
     transition: all 0.3s ease;
-    animation: fadeIn 0.5s ease;
+    animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    width: 100%;
+    border: 3px solid rgba(255, 182, 193, 0.3);
 }
 
-@keyframes fadeIn {
-    from {
+#main-card::before {
+    content: '✨';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+#main-card::after {
+    content: '✨';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    animation: sparkle 2s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+@keyframes cardEntrance {
+    0% {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(0.8) translateY(30px);
     }
-    to {
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes sparkle {
+    0%, 100% {
         opacity: 1;
         transform: scale(1);
     }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+.gif-container {
+    margin-bottom: 25px;
+    display: inline-block;
+    position: relative;
 }
 
 #status-gif {
-    width: 200px;
+    width: 220px;
     max-width: 100%;
     height: auto;
-    margin-bottom: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(255, 107, 157, 0.2);
+    border: 4px solid var(--light-pink);
+    transition: transform 0.3s ease;
+}
+
+#status-gif:hover {
+    transform: scale(1.05);
 }
 
 h1 {
-    color: #d63384;
-    font-size: 2rem;
-    margin-bottom: 10px;
-    animation: pulse 2s ease-in-out infinite;
+    color: var(--primary-pink);
+    font-size: 2.2rem;
+    font-family: 'Pacifico', cursive;
+    margin-bottom: 15px;
+    animation: gentlePulse 3s ease-in-out infinite;
+    line-height: 1.3;
+    text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.1);
 }
 
-@keyframes pulse {
+@keyframes gentlePulse {
     0%, 100% {
         transform: scale(1);
     }
     50% {
-        transform: scale(1.05);
+        transform: scale(1.03);
     }
 }
 
-.buttons {
+.heart-divider {
+    font-size: 1.5rem;
+    margin: 20px 0;
+    animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1);
+    }
+}
+
+.buttons-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     margin-top: 30px;
-    position: relative;
-    min-height: 60px;
     flex-wrap: wrap;
+    min-height: 70px;
 }
 
 button {
-    padding: 15px 30px;
-    font-size: 1.2rem;
+    padding: 18px 40px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    font-family: 'Quicksand', sans-serif;
     border: none;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     position: relative;
+    overflow: hidden;
+    transform-origin: center;
 }
 
-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+button .button-text {
+    position: relative;
+    z-index: 2;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 #yesButton {
-    background: linear-gradient(135deg, #ff4d6d 0%, #ff758f 100%);
+    background: linear-gradient(135deg, var(--primary-pink) 0%, var(--secondary-pink) 100%);
     color: white;
     transition: all 0.3s ease;
+    transform: scale(1);
+    border: 3px solid rgba(255, 255, 255, 0.5);
 }
 
 #yesButton:hover {
-    background: linear-gradient(135deg, #ff3355 0%, #ff6b85 100%);
-    box-shadow: 0 8px 25px rgba(255, 77, 109, 0.4);
-    transform: translateY(-2px);
+    transform: scale(1.05);
+    box-shadow: 
+        0 12px 30px var(--shadow-pink),
+        0 0 20px rgba(255, 107, 157, 0.4);
+}
+
+#yesButton:active {
+    transform: scale(0.95);
 }
 
 #noButton {
-    background: linear-gradient(135deg, #adb5bd 0%, #ced4da 100%);
-    color: white;
+    background: linear-gradient(135deg, #c7c7c7 0%, #e0e0e0 100%);
+    color: #666;
     transition: all 0.2s ease;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+}
+
+#noButton:hover {
+    background: linear-gradient(135deg, #b8b8b8 0%, #d1d1d1 100%);
+    transform: scale(1.05);
+}
+
+#noButton:active {
+    transform: scale(0.95);
 }
 
 #noButton.hidden {
     opacity: 0;
     pointer-events: none;
-    transform: scale(0);
+    transform: scale(0) rotate(180deg);
 }
 
-/* Success state */
+/* Success state styling */
 .success-state {
-    animation: celebration 0.5s ease;
+    animation: successPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .success-state h1 {
-    color: #ff4d6d;
+    color: var(--primary-pink);
     font-size: 2.5rem;
 }
 
-.success-state img {
-    animation: bounce 1s ease infinite;
+.success-state .celebration-message {
+    color: var(--primary-pink);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 25px;
+    animation: slideUp 0.5s ease;
 }
 
-@keyframes celebration {
+@keyframes successPop {
     0% {
         transform: scale(1);
     }
@@ -168,13 +317,39 @@ button:active {
     }
 }
 
-@keyframes bounce {
-    0%, 100% {
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
         transform: translateY(0);
     }
-    50% {
-        transform: translateY(-10px);
+}
+
+.success-state img {
+    animation: bounceCelebrate 1s ease-in-out infinite;
+}
+
+@keyframes bounceCelebrate {
+    0%, 100% {
+        transform: translateY(0) scale(1);
     }
+    50% {
+        transform: translateY(-15px) scale(1.05);
+    }
+}
+
+/* Shake animation for mobile */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px) rotate(-2deg); }
+    20%, 40%, 60%, 80% { transform: translateX(8px) rotate(2deg); }
+}
+
+.shake-animation {
+    animation: shake 0.5s ease;
 }
 
 /* Confetti canvas */
@@ -190,16 +365,54 @@ button:active {
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-    .container {
+    body {
         padding: 15px;
     }
     
     #main-card {
-        padding: 30px 20px;
+        padding: 40px 30px;
+        border-radius: 30px;
     }
     
     h1 {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+    }
+    
+    #status-gif {
+        width: 180px;
+    }
+    
+    button {
+        padding: 16px 35px;
+        font-size: 1.2rem;
+    }
+    
+    .buttons-container {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    #main-card {
+        padding: 35px 25px;
+    }
+    
+    #main-card::before,
+    #main-card::after {
+        font-size: 20px;
+        top: 15px;
+    }
+    
+    #main-card::before {
+        left: 15px;
+    }
+    
+    #main-card::after {
+        right: 15px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
     }
     
     #status-gif {
@@ -207,57 +420,76 @@ button:active {
     }
     
     button {
-        padding: 12px 24px;
-        font-size: 1rem;
+        padding: 14px 30px;
+        font-size: 1.1rem;
     }
     
-    .buttons {
-        gap: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
+    .heart-divider {
         font-size: 1.3rem;
-    }
-    
-    #status-gif {
-        width: 120px;
-    }
-    
-    button {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+        margin: 15px 0;
     }
     
     .success-state h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
+    }
+    
+    .success-state .celebration-message {
+        font-size: 1.1rem;
     }
 }
 
 /* Landscape mobile fix */
-@media (max-height: 600px) and (orientation: landscape) {
+@media (max-height: 700px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+    }
+    
     #main-card {
-        padding: 20px 15px;
+        padding: 25px 20px;
     }
     
     #status-gif {
-        width: 100px;
-        margin-bottom: 10px;
+        width: 120px;
+        margin-bottom: 15px;
     }
     
     h1 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+    
+    .heart-divider {
+        margin: 10px 0;
         font-size: 1.2rem;
-        margin-bottom: 5px;
     }
     
     button {
-        padding: 8px 16px;
-        font-size: 0.85rem;
+        padding: 12px 25px;
+        font-size: 1rem;
     }
     
-    .buttons {
+    .buttons-container {
         margin-top: 15px;
-        min-height: 40px;
+        min-height: 50px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    #main-card {
+        padding: 30px 20px;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+    }
+    
+    #status-gif {
+        width: 130px;
+    }
+    
+    button {
+        padding: 12px 25px;
+        font-size: 1rem;
     }
 }
