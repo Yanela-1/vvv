@@ -10,7 +10,6 @@ const noPhrases = [
     "Sure ka na ba? 🥺",
     "Dali na po 💔",
     "Lahhhh",
-    "Pretty please?",
     "Sige na po bebeee"
 ];
 
@@ -91,10 +90,10 @@ function celebrate() {
         <div class="gif-container">
             <img src="./celebration-cat.gif" alt="Celebration" id="status-gif">
         </div>
-        <h1>Yehey! Sabi ko na ba papayag ka 🥰🥰</h1>
-        <div class="heart-divider">❤️ 💖 ❤️</div>
+        <h1>Yehey! Sabi ko na ba papayag ka</h1>
+        <div class="heart-divider">🥰🥰</div>
         <p class="celebration-message">
-            Labyo may ka date na sa porten!
+            Labyo date tayo sa porten hehe
         </p>
     `;
     
