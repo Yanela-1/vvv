@@ -7,11 +7,11 @@ const maxNoAttempts = 5; // After 5 clicks, No button disappears
 // Phrases that change as they keep clicking No
 const noPhrases = [
     "No",
-    "Are you sure? 🥺",
-    "Really though? 💔",
-    "Think again! 💭",
-    "Pretty please? 🙏",
-    "One more chance? ✨"
+    "Sure ka na ba? 🥺",
+    "Dali na po 💔",
+    "Lahhhh",
+    "Pretty please?",
+    "Sige na po bebeee"
 ];
 
 function handleNo() {
@@ -43,7 +43,7 @@ function handleNo() {
         
         // Update the question text
         const question = document.getElementById('question');
-        question.textContent = "I knew you'd say yes! 💕";
+        question.textContent = "Sapilitan na to 😾😾";
         question.style.animation = 'successPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
         
         // Make the Yes button even more prominent
@@ -91,10 +91,10 @@ function celebrate() {
         <div class="gif-container">
             <img src="./celebration-cat.gif" alt="Celebration" id="status-gif">
         </div>
-        <h1>Yay! I knew you'd say yes! 💕</h1>
+        <h1>Yehey! Sabi ko na ba papayag ka 🥰🥰</h1>
         <div class="heart-divider">❤️ 💖 ❤️</div>
         <p class="celebration-message">
-            Can't wait to see you on the 14th! 🎉
+            Labyo may ka date na sa porten!
         </p>
     `;
     
