@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hey Bebe</title>
+    <title>For my Baby</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="hearts-background"></div>
+    
     <div class="container">
         <div id="main-card">
-            <img id="status-gif" src="./cat-heart.gif" alt="Cute Cat">
-            <h1 id="question">Will you be my Valentine? 🥺❤️</h1>
+            <div class="gif-container">
+                <img id="status-gif" src="./cat-heart.gif" alt="Cute Cat">
+            </div>
+            <h1 id="question">Will you be my Valentine? 🥰🥰</h1>
+            <div class="heart-divider">💕</div>
             
-            <div class="buttons">
-                <button id="yesButton" onclick="celebrate()">Yes! 💕</button>
-                <button id="noButton" onmouseover="handleNo()" onclick="handleNo()">No</button>
+            <div class="buttons-container">
+                <button id="yesButton" onclick="celebrate()">
+                    <span class="button-text">Yes! 💕</span>
+                </button>
+                <button id="noButton" onclick="handleNo()">
+                    <span class="button-text">No</span>
+                </button>
             </div>
         </div>
     </div>
